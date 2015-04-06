@@ -6,121 +6,6 @@
 <title>TransLoc - Geolocalización Vehicular</title>
 
 
-<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript">
-    setInterval("location.reload()",10000);
-    </script>
-
-    <?php 
-      $connection=mysql_connect ("localhost", "root", "cin1140858120");
-        if (!$connection) {  die('Not connected : ' . mysql_error());} 
-
-          // Set the active MySQL database
-
-      $db_selected = mysql_select_db("taxi_dis", $connection);
-
-      //crear variable de sesion para hacer lo del tiempo real
-
-      if (isset($_SESSION['initime'])==0){//preguntar si anteriormente se inicio sesion
-        $query1="SELECT id FROM coordenadas WHERE id=(SELECT MAX(id) FROM coordenadas)"; //escoger el valor actual justo cuando se inicio sesion
-        $result1= mysql_query($query1);
-        $_SESSION['initime']=mysql_result($result1,0,"id");
-      }
-
-      //Ya anteriormente se habia iniciado sesion, entonces se hace lo siguiente:
-
-      $inix=$_SESSION['initime'];
-     
-        // Select all the rows in the markers table
-
-        $query = "SELECT  `latitud`, `longitud` FROM coordenadas WHERE id>='$inix'";
-        $result = mysql_query($query);
-        $numrow=mysql_numrows($result);
-
-        $i=0;
-        while ($i<$numrow){
-          $latitud[$i]= mysql_result($result,$i,"latitud");
-          $longitud[$i]= mysql_result($result,$i,"longitud");
-          $i=$i+1;
-        }         
-    ?>
-
-    <script>
-
-      var latitud=<?php echo json_encode($latitud);?>;
-
-      var longitud=<?php echo json_encode($longitud);?>;
-
-    </script>
-    
-    <script>
-      $(document).ready(function() {
-        
-        // Save the positions' history
-
-        var path = []; 
-       
-          for (i=0; i< latitud.length; i++){
-          path.push(new google.maps.LatLng(latitud[i], longitud[i]));
-          }          
-          // Create the map
-          var myOptions = {
-            zoom : 16,
-            center : path[latitud.length-1],
-            mapTypeId : google.maps.MapTypeId.ROADMAP
-          }
-          var map = new google.maps.Map(document.getElementById("map"), myOptions);          
- 
-          // Create the array that will be used to fit the view to the points range and
-          // place the markers to the polyline's points
-          var latLngBounds = new google.maps.LatLngBounds();
-          for(var i = 0; i < path.length; i++) {
-            latLngBounds.extend(path[i]);
-            // Place the marker
-            
-          }
-          // Creates the polyline object
-          new google.maps.Marker({
-              map: map,
-              position: path[path.length-1],
-              title: "Esta aqui " 
-            });
-          var polyline = new google.maps.Polyline({
-            map: map,
-            path: path,
-            strokeColor: '#FF3366',
-            strokeOpacity: 0.7,
-            strokeWeight: 1
-          });
-          // Fit the bounds of the generated points
-          map.fitBounds(latLngBounds);
-        },
-        function(positionError){
-          $("#error").append("Error: " + positionError.message + "<br />");
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 15 * 1000 // 10 seconds
-      });
-    </script>
-    <style type="text/css">
-	
-      #map {
-        width: 700px;
-        height: 330px;
-        margin-top: 20px;
-        margin-left: 200px;
-      }
-      body {
-    background-color: #FFCCFF
-    }
-
-    h1 {
-    color: #FF0066;
-    background-color: #FFCCFF;
-    }
-    </style>
 
 </head>
 <body>
@@ -144,13 +29,11 @@
   <div id="wrap">
     <div id="homeheader">
     
-   	   <?php
-    	echo "Latitud: ", $latitud[count($latitud)-1];
-  	 	 echo "  ";
- 	  	 echo "Longitud: ", $longitud[count($longitud)-1];
-   		 ?>
+
+
     	<div id="map"></div>
     	<p id="error"></p>
+
 
 
       <div id="rightboxes">
@@ -193,7 +76,7 @@
             <h3><a href="bitacora.php">Proyecto No.2, Bitácora No.3</a></h3>
             <p class="postmeta">By Grupo02</p>
           </div>
-          <p>Proyect Bitacora texto... <a href="bitacora.php">Leer más</a></p>
+          <p>Para esta tercera etapa fue necesario realizar la consulta con el fabricante (DCT) del modem Syrus para corregir el error del envío de la localización GPS. Ellos realizaron pruebas y ajustes remotamente, y al final con ayuda conjunta de nosotros se realizaron las últimas configuraciones y se corrigió el error que se venía presentando. <a href="bitacora.php">Leer más</a></p>
         </div>
         <div class="post">
           <div class="posthead">
@@ -223,14 +106,14 @@
       <h2>Geolocalzación</h2>
       <p>Google API.</p>
       <ul>
-        <li><a href="#">velit vehicula</a></li>
+        <li><a href="#">www.googledev.com</a></li>
       </ul>
     </div>
     <div class="col2">
       <h2>Github</h2>
-      <p>Repositorio con el coso.</p>
+      <p>Repositorio TransLoc en Github.</p>
       <ul>
-        <li><a href="#">velit vehicula</a></li>
+        <li><a href="#">https://github.com/nestornesus/TransLocGPS</a></li>
       </ul>
     </div>
     <div class="col3">
@@ -242,7 +125,7 @@
   <div id="footer">
     <div id="copyright">
       <p class="left">Copyright &copy; 2015, Diseño Electrónico, Universidad del Norte</p>
-      <p class="right"> Bernal G. Néstor, Jordan N. Jhoyner & Mejía S. Gustavo</a></p>
+      <p class="right"> Bernal G. Néstor, Jordan N. Jhoyner y Mejía S. Gustavo</a></p>
       <div class="clear"></div>
     </div>
   </div>
