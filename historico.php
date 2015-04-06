@@ -92,7 +92,7 @@
   <div id="footer">
     <div id="copyright">
       <p class="left">Copyright &copy; 2015, Diseño Electrónico, Universidad del Norte</p>
-      <p class="right"> Bernal G. Néstor, Jordan N. Jhoyner & Mejía S. Gustavo</a></p>
+      <p class="right"> Bernal G. Néstor, Jordan N. Jhoyner &amp; Mejía S. Gustavo</a></p>
       <div class="clear"></div>
     </div>
   </div>
