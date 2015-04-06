@@ -5,49 +5,12 @@
 <link href="style.css" rel="stylesheet" type="text/css" />
 <title>TransLoc - Geolocalización Vehicular</title>
 
-
-<<<<<<< HEAD
-=======
 <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
 setInterval("location.reload()",10000);
 </script>
 
-    <!-- <?php 
-      $connection=mysql_connect ("localhost", "root", "", "Telemetría");
-        if (!$connection) {  die('Not connected : ' . mysql_error());} 
-
-          // Set the active MySQL database
-
-      $db_selected = mysql_select_db("taxi_dis", $connection);
-
-      //crear variable de sesion para hacer lo del tiempo real
-
-      if (isset($_SESSION['initime'])==0){//preguntar si anteriormente se inicio sesion
-        $query1="SELECT id FROM coordenadas WHERE id=(SELECT MAX(id) FROM coordenadas)"; //escoger el valor actual justo cuando se inicio sesion
-        $result1= mysql_query($query1);
-        $_SESSION['initime']=mysql_result($result1,0,"id");
-      }
-
-      //Ya anteriormente se habia iniciado sesion, entonces se hace lo siguiente:
-
-      $inix=$_SESSION['initime'];
-     
-        // Select all the rows in the markers table
-
-        $query = "SELECT  `latitud`, `longitud` FROM coordenadas WHERE id>='$inix'";
-        $result = mysql_query($query);
-        $numrow=mysql_numrows($result);
-
-        $i=0;
-        while ($i<$numrow){
-          $latitud[$i]= mysql_result($result,$i,"latitud");
-          $longitud[$i]= mysql_result($result,$i,"longitud");
-          $i=$i+1;
-        }         
-    ?>
--->
 
     <script>
       var latitud=<?php echo json_encode($latitud);?>;
@@ -121,7 +84,6 @@ setInterval("location.reload()",10000);
     background-color: #FFCCFF;
     }
     </style>
->>>>>>> origin/master
 
 
 </head>
@@ -147,16 +109,6 @@ setInterval("location.reload()",10000);
     <div id="homeheader">
     
 
-<<<<<<< HEAD
-
-=======
-		<?php
-    		echo "Latitud: ", $latitud[count($latitud)-1];
-  		echo "  ";
- 	  	echo "Longitud: ", $longitud[count($longitud)-1];
-   		?>
-   		
->>>>>>> origin/master
     	<div id="map"></div>
     	<p id="error"></p>
 
