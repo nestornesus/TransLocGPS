@@ -6,6 +6,7 @@
 <title>TransLoc - Geolocalización Vehicular</title>
 
 
+
 </head>
 <body>
 
@@ -28,13 +29,11 @@
   <div id="wrap">
     <div id="homeheader">
     
-   	   <?php
-    	echo "Latitud: ", $latitud[count($latitud)-1];
-  	 	 echo "  ";
- 	  	 echo "Longitud: ", $longitud[count($longitud)-1];
-   		 ?>
+
+
     	<div id="map"></div>
     	<p id="error"></p>
+
 
 
       <div id="rightboxes">
@@ -112,7 +111,7 @@
     </div>
     <div class="col2">
       <h2>Github</h2>
-      <p>Repositorio en Github.</p>
+      <p>Repositorio con el coso.</p>
       <ul>
         <li><a href="#">velit vehicula</a></li>
       </ul>
@@ -126,7 +125,7 @@
   <div id="footer">
     <div id="copyright">
       <p class="left">Copyright &copy; 2015, Diseño Electrónico, Universidad del Norte</p>
-      <p class="right"> Bernal G. Néstor, Jordan N. Jhoyner &amp; Mejía S. Gustavo</a></p>
+      <p class="right"> Bernal G. Néstor, Jordan N. Jhoyner & Mejía S. Gustavo</a></p>
       <div class="clear"></div>
     </div>
   </div>
