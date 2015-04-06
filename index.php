@@ -3,65 +3,122 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css" />
-
-<style>
-      #map-canvas {
-        width: 100%;
-        height: 700px;
-      }
-    </style>
-    <script type="text/javascript">
-		var lattext ;
-		if(navigator.appName.search('Microsoft')>-1) { lattext = new ActiveXObject('MSXML2.XMLHTTP'); }
-		else { lattext = new XMLHttpRequest(); }
-			
-			lattext.open('get', 'latitud.txt', true); 
-			lattext.send(null);
-			
-	
-	</script>
-      <script type="text/javascript">
-		var longtext ;
-		if(navigator.appName.search('Microsoft')>-1) { longtext = new ActiveXObject('MSXML2.XMLHTTP'); }
-		else { longtext = new XMLHttpRequest(); }
-			
-			longtext.open('get', 'longitud.txt', true); 
-			longtext.send(null);
-			
-	
-	</script>
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script>
-      function initialize() {
-        var mapCanvas = document.getElementById('map-canvas');
-/*variables incluidas*/
-        var lat   = lattext.responseText;
-        var long  = longtext.responseText;
-        var mapZoom   = 16;
-/*Fin variables entrada*/
-		var miub= new google.maps.LatLng(lat,long);
-        var mapOptions = {
-          center: miub,
-          zoom: mapZoom,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-        var map = new google.maps.Map(mapCanvas, mapOptions);
-		var miMarcador = new google.maps.Marker({
-      position: miub,
-      map: map,
-      title: 'Ubicacion del vehiculo'
-  });
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-
-
 <title>TransLoc - Geolocalización Vehicular</title>
 
 
+<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+setInterval("location.reload()",10000);
+</script>
 
+    <!-- <?php 
+      $connection=mysql_connect ("localhost", "root", "", "Telemetría");
+        if (!$connection) {  die('Not connected : ' . mysql_error());} 
 
+          // Set the active MySQL database
 
+      $db_selected = mysql_select_db("taxi_dis", $connection);
+
+      //crear variable de sesion para hacer lo del tiempo real
+
+      if (isset($_SESSION['initime'])==0){//preguntar si anteriormente se inicio sesion
+        $query1="SELECT id FROM coordenadas WHERE id=(SELECT MAX(id) FROM coordenadas)"; //escoger el valor actual justo cuando se inicio sesion
+        $result1= mysql_query($query1);
+        $_SESSION['initime']=mysql_result($result1,0,"id");
+      }
+
+      //Ya anteriormente se habia iniciado sesion, entonces se hace lo siguiente:
+
+      $inix=$_SESSION['initime'];
+     
+        // Select all the rows in the markers table
+
+        $query = "SELECT  `latitud`, `longitud` FROM coordenadas WHERE id>='$inix'";
+        $result = mysql_query($query);
+        $numrow=mysql_numrows($result);
+
+        $i=0;
+        while ($i<$numrow){
+          $latitud[$i]= mysql_result($result,$i,"latitud");
+          $longitud[$i]= mysql_result($result,$i,"longitud");
+          $i=$i+1;
+        }         
+    ?>
+-->
+
+    <script>
+      var latitud=<?php echo json_encode($latitud);?>;
+      var longitud=<?php echo json_encode($longitud);?>;
+    </script>
+    
+    <script>
+      $(document).ready(function() {
+      
+        // Save the positions' history
+
+        var path = []; 
+          for (i=0; i< latitud.length; i++){
+          path.push(new google.maps.LatLng(latitud[i], longitud[i]));
+          }          
+          // Create the map
+          var myOptions = {
+            zoom : 16,
+            center : path[latitud.length-1],
+            mapTypeId : google.maps.MapTypeId.ROADMAP
+          }
+          var map = new google.maps.Map(document.getElementById("map"), myOptions);          
+ 
+          // Create the array that will be used to fit the view to the points range and
+          // place the markers to the polyline's points
+          var latLngBounds = new google.maps.LatLngBounds();
+          for(var i = 0; i < path.length; i++) {
+            latLngBounds.extend(path[i]);
+            // Place the marker
+            
+          }
+          // Creates the polyline object
+          new google.maps.Marker({
+              map: map,
+              position: path[path.length-1],
+              title: "Posición" 
+            });
+          var polyline = new google.maps.Polyline({
+            map: map,
+            path: path,
+            strokeColor: '#FF3366',
+            strokeOpacity: 0.7,
+            strokeWeight: 1
+          });
+          // Fit the bounds of the generated points
+          map.fitBounds(latLngBounds);
+        },
+        function(positionError){
+          $("#error").append("Error: " + positionError.message + "<br />");
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15 * 1000 // 10 seconds
+      });
+    </script>
+    
+    
+    <style type="text/css">
+      #map {
+        width: 700px;
+        height: 330px;
+        margin-top: 20px;
+        margin-left: 200px;
+      }
+      body {
+    background-color: #FFCCFF
+    }
+
+    h1 {
+    color: #FF0066;
+    background-color: #FFCCFF;
+    }
+    </style>
 
 
 </head>
@@ -87,7 +144,12 @@
     <div id="homeheader">
     
 
-
+		<?php
+    		echo "Latitud: ", $latitud[count($latitud)-1];
+  		echo "  ";
+ 	  	echo "Longitud: ", $longitud[count($longitud)-1];
+   		?>
+   		
     	<div id="map"></div>
     	<p id="error"></p>
 
