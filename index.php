@@ -13,14 +13,14 @@
     </script>
 
     <?php 
-      $connection=mysql_connect ("localhost", "root", "cin1140858120");
-        if (!$connection) {  die('Not connected : ' . mysql_error());} 
+      $connection=mysql_connect ("localhost", "root", "");
+        if (!$connection) {die ('Not connected : ' . mysql_error());} 
 
           // Set the active MySQL database
+          
+      $db_selected = mysql_select_db("Telemetria", $connection);
 
-      $db_selected = mysql_select_db("taxi_dis", $connection);
-
-      //crear variable de sesion para hacer lo del tiempo real
+      //Crear variable de sesion para consulta en tiempo real
 
       if (isset($_SESSION['initime'])==0){//preguntar si anteriormente se inicio sesion
         $query1="SELECT id FROM coordenadas WHERE id=(SELECT MAX(id) FROM coordenadas)"; //escoger el valor actual justo cuando se inicio sesion
@@ -228,7 +228,7 @@
     </div>
     <div class="col2">
       <h2>Github</h2>
-      <p>Repositorio con el coso.</p>
+      <p>Repositorio en Github.</p>
       <ul>
         <li><a href="#">velit vehicula</a></li>
       </ul>
