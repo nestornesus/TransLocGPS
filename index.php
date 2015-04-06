@@ -3,7 +3,64 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css" />
+
+<style>
+      #map-canvas {
+        width: 100%;
+        height: 700px;
+      }
+    </style>
+    <script type="text/javascript">
+		var lattext ;
+		if(navigator.appName.search('Microsoft')>-1) { lattext = new ActiveXObject('MSXML2.XMLHTTP'); }
+		else { lattext = new XMLHttpRequest(); }
+			
+			lattext.open('get', 'latitud.txt', true); 
+			lattext.send(null);
+			
+	
+	</script>
+      <script type="text/javascript">
+		var longtext ;
+		if(navigator.appName.search('Microsoft')>-1) { longtext = new ActiveXObject('MSXML2.XMLHTTP'); }
+		else { longtext = new XMLHttpRequest(); }
+			
+			longtext.open('get', 'longitud.txt', true); 
+			longtext.send(null);
+			
+	
+	</script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+      function initialize() {
+        var mapCanvas = document.getElementById('map-canvas');
+/*variables incluidas*/
+        var lat   = lattext.responseText;
+        var long  = longtext.responseText;
+        var mapZoom   = 16;
+/*Fin variables entrada*/
+		var miub= new google.maps.LatLng(lat,long);
+        var mapOptions = {
+          center: miub,
+          zoom: mapZoom,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+		var miMarcador = new google.maps.Marker({
+      position: miub,
+      map: map,
+      title: 'Ubicacion del vehiculo'
+  });
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+
 <title>TransLoc - Geolocalización Vehicular</title>
+
+
+
+
 
 
 
@@ -125,7 +182,7 @@
   <div id="footer">
     <div id="copyright">
       <p class="left">Copyright &copy; 2015, Diseño Electrónico, Universidad del Norte</p>
-      <p class="right"> Bernal G. Néstor, Jordan N. Jhoyner & Mejía S. Gustavo</a></p>
+      <p class="right"> Bernal G. Néstor, Jordan N. Jhoyner y Mejía S. Gustavo</a></p>
       <div class="clear"></div>
     </div>
   </div>
