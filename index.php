@@ -56,11 +56,11 @@ setInterval("location.reload()",10000);
       $(document).ready(function() {
       
         // Save the positions' history
+        //var path = []; 
+        //for (i=0; i< latitud.length; i++){
+        //path.push(new google.maps.LatLng(latitud[i], longitud[i]));
+        //}    
 
-        var path = []; 
-          for (i=0; i< latitud.length; i++){
-          path.push(new google.maps.LatLng(latitud[i], longitud[i]));
-          }          
           // Create the map
           var myOptions = {
             zoom : 16,
