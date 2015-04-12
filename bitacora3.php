@@ -31,15 +31,14 @@
       <div id="page">
         <div class="post">
           <div class="posthead">
-            <p class="date">Abril 06, 2015</p>
-            <h3><a href="bitacora.php">Proyecto No.2, Bitácora No.3</a></h3>
+            <p class="date">Marzo 09, 2015</p>
+            <h3><a href="bitacora.php">Proyecto No.2, Bitácora No.1</a></h3>
             <p class="postmeta">Por Grupo 02 </p>
           </div>
-          <p align="justify">Para esta tercera etapa fue necesario realizar la consulta con el fabricante (DCT) del modem Syrus para corregir el error del envío de la localización GPS. Ellos realizaron pruebas y ajustes remotamente, y al final con ayuda conjunta de nosotros se realizaron las últimas configuraciones y se corrigió el error que se venía presentando.</p>
-          <p align="justify">A partir de estos cambios, fue necesario realizar cambios en el sniffer y en la base datos, ya que el mensaje del evento enviado por el Syrus había sido modificado con respecto al que se tenía anteriormente. Luego se verificaron diferentes formas de establecer la conexión de la base de datos con la página web, y se concluyó que se debía usar codificación PHP para la correcta visualización de la consulta de históricos.</p>
-          <p align="justify">En consecuencia a ello, se establecieron los comandos SQL que hacían el llamado a la base de datos para la consulta de históricos. Primero se estableció la consulta de la fecha y hora en la que el vehículo pasó por una coordenada específica. Después se establecieron los comandos que consultaban las coordenadas que había transcurrido el vehículo para cierto rango de fecha.</p>
-          <p align="justify">Más adelante, se trató de configurar la página web con el fin de poder visualizar la base de datos a partir de la consulta. Así mismo, se estableció la forma en que la polilínea iba a ser trazada en la API de Google después de haber realizado los cambios en la lectura del sniffer y la base de datos.</p>
-          <p align="justify">Finalmente, se implementó el código en php para la consulta de históricos y su respectiva visualización. Además, debido a problemas con la plataforma IBM Bluemix utilizada como PaaS para el servidor en la nube (despliegue inestable y pocas características necessarias para la consulta a base de datos), se realizó el traslado de los servicios web a la plataforma PaaS llamada Azure, desarrollada por Microsoft.</p>
+          <p align="justify">A partir de la culminación del primer proyecto, el cual consistió en adquirir las coordenadas de un modem GPS (Syrus) y enviarlas a un servidor para su correcta visualización en una cartografía mediante una página web, lo que se procede a desarrollar es una página web en donde se pueda consultar el recorrido realizado del vehículo, así mismo como la consulta de un historial de ubicación teniendo en cuenta la fecha y hora en la que el vehículo transitó.</p>
+          <p align="justify">En primer lugar se debe crear una base de datos la cual registre los datos de la localización que el modem Syrus valla enviando. Para ello se escogió MySQL Database, ya que posee gran versatilidad en el uso e implementación en distintos lenguajes. En ella se creó la base de datos y en ella una tabla con los campos: Latitud, Longitud, Semana, Dia y Hora.</p>
+          <p align="justify">Además, se realizaron algunas modificaciones al código en Python del sniffer para dejar de exportar las coordenadas en archivos de texto y comenzar a registrarlas en la base de datos. Se tuvo que tener en cuenta el tipo de dato de cada campo en la tabla, así como la instalación de las librerías que permitieran conectar la base de datos SQL con el archivo Python.</p>
+          <p align="justify">Más adelante, se debe usar esta base de datos con el fin de mostrar el recorrido en tiempo real del modem Syrus, a través de la página web usando la API de Google Maps implementada previamente en el proyecto 1. Seguramente se deberá obtener el recorrido mediante la unión de cada uno de los puntos que se van registrando y por ello es de suma importancia establecer perfectamente la primera etapa de este proyecto.</p>
         </div>
       </div>
       <div id="sidebar">

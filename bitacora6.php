@@ -31,15 +31,26 @@
       <div id="page">
         <div class="post">
           <div class="posthead">
-            <p class="date">Abril 06, 2015</p>
-            <h3><a href="bitacora.php">Proyecto No.2, Bitácora No.3</a></h3>
+            <p class="date">Febrero 09, 2015</p>
+            <h3><a href="bitacora.php">Proyecto No.1, Bitácora No.1</a></h3>
             <p class="postmeta">Por Grupo 02 </p>
           </div>
-          <p align="justify">Para esta tercera etapa fue necesario realizar la consulta con el fabricante (DCT) del modem Syrus para corregir el error del envío de la localización GPS. Ellos realizaron pruebas y ajustes remotamente, y al final con ayuda conjunta de nosotros se realizaron las últimas configuraciones y se corrigió el error que se venía presentando.</p>
-          <p align="justify">A partir de estos cambios, fue necesario realizar cambios en el sniffer y en la base datos, ya que el mensaje del evento enviado por el Syrus había sido modificado con respecto al que se tenía anteriormente. Luego se verificaron diferentes formas de establecer la conexión de la base de datos con la página web, y se concluyó que se debía usar codificación PHP para la correcta visualización de la consulta de históricos.</p>
-          <p align="justify">En consecuencia a ello, se establecieron los comandos SQL que hacían el llamado a la base de datos para la consulta de históricos. Primero se estableció la consulta de la fecha y hora en la que el vehículo pasó por una coordenada específica. Después se establecieron los comandos que consultaban las coordenadas que había transcurrido el vehículo para cierto rango de fecha.</p>
-          <p align="justify">Más adelante, se trató de configurar la página web con el fin de poder visualizar la base de datos a partir de la consulta. Así mismo, se estableció la forma en que la polilínea iba a ser trazada en la API de Google después de haber realizado los cambios en la lectura del sniffer y la base de datos.</p>
-          <p align="justify">Finalmente, se implementó el código en php para la consulta de históricos y su respectiva visualización. Además, debido a problemas con la plataforma IBM Bluemix utilizada como PaaS para el servidor en la nube (despliegue inestable y pocas características necessarias para la consulta a base de datos), se realizó el traslado de los servicios web a la plataforma PaaS llamada Azure, desarrollada por Microsoft.</p>
+          <p align="justify">Para atender al primer objetivo en el diseño e implementación de una solución de telemetría vehicular es necesario programar un modem GPS/GPRS para el envío de coordenadas geográficas capturadas hacia un web server.</p>
+          <p align="justify">Como primer paso del proyecto se busca enviar un SMS con coordenadas geográficas mediante el uso de un Modem Syrus GPS y una SIM Card de una empresa de telefonía movil. Inicialmente se consultó la documentación del dispositivo módem a utilizar; las características, especificaciones y conexiones de este. Se procedió a cargar el módem durante 10 minutos, luego de cargado se hizo la conexión con un PC mediante el puerto serial con estándar RS-232.</p>
+          <p align="justify">Una vez conectado con el PC es necesario configurar tanto el PC como el módem y que de esta manera se permita cumplir eficientemente con el objetivo. Para configurar el equipo se hace uso de la herramienta HyperTermial, esta permite acceder al módem desde una interfás gráfica de usuario en el PC.</p>
+          <p align="justify">Para el envío del SMS se implementa un código en la terminal de emulación, luego de consultar el manual de usuario del módem y distintas fuentes bibliográficas se llegó a la realización del siguiente código para el envío del SMS.</p>
+          <code> 
+            >QVR< <br />
+            >SRT;ALL< <br />
+            >SXADP**U< <br />
+            >SIDSMS< <br />
+            >SXAID0< <br />
+            >SXADP10003008741173< <br />
+            >SXADP11003002534353< <br />
+            >SDA4;P10,P11,P15< <br />
+            >SED31NV4;F13+< <br />
+          </code>
+          <p align="justify">Finalmente se realizan consultas sobre cómo configurar APN de manera que permita comunica la red celular y la red internet, notando que debe ser asignada una IP para así configurar la dirección de host. Esto con el fin de cumplir con la tarea de enviar  coordenadas geográficas a una IP y que estas sean leídas mediante la consulta de puertos TCP y UDP.</p>
         </div>
       </div>
       <div id="sidebar">

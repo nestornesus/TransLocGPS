@@ -31,15 +31,23 @@
       <div id="page">
         <div class="post">
           <div class="posthead">
-            <p class="date">Abril 06, 2015</p>
-            <h3><a href="bitacora.php">Proyecto No.2, Bitácora No.3</a></h3>
+            <p class="date">Febrero 23, 2015</p>
+            <h3><a href="bitacora.php">Proyecto No.1, Bitácora No.3</a></h3>
             <p class="postmeta">Por Grupo 02 </p>
           </div>
-          <p align="justify">Para esta tercera etapa fue necesario realizar la consulta con el fabricante (DCT) del modem Syrus para corregir el error del envío de la localización GPS. Ellos realizaron pruebas y ajustes remotamente, y al final con ayuda conjunta de nosotros se realizaron las últimas configuraciones y se corrigió el error que se venía presentando.</p>
-          <p align="justify">A partir de estos cambios, fue necesario realizar cambios en el sniffer y en la base datos, ya que el mensaje del evento enviado por el Syrus había sido modificado con respecto al que se tenía anteriormente. Luego se verificaron diferentes formas de establecer la conexión de la base de datos con la página web, y se concluyó que se debía usar codificación PHP para la correcta visualización de la consulta de históricos.</p>
-          <p align="justify">En consecuencia a ello, se establecieron los comandos SQL que hacían el llamado a la base de datos para la consulta de históricos. Primero se estableció la consulta de la fecha y hora en la que el vehículo pasó por una coordenada específica. Después se establecieron los comandos que consultaban las coordenadas que había transcurrido el vehículo para cierto rango de fecha.</p>
-          <p align="justify">Más adelante, se trató de configurar la página web con el fin de poder visualizar la base de datos a partir de la consulta. Así mismo, se estableció la forma en que la polilínea iba a ser trazada en la API de Google después de haber realizado los cambios en la lectura del sniffer y la base de datos.</p>
-          <p align="justify">Finalmente, se implementó el código en php para la consulta de históricos y su respectiva visualización. Además, debido a problemas con la plataforma IBM Bluemix utilizada como PaaS para el servidor en la nube (despliegue inestable y pocas características necessarias para la consulta a base de datos), se realizó el traslado de los servicios web a la plataforma PaaS llamada Azure, desarrollada por Microsoft.</p>
+          <p align="justify">Después de haber completado la etapa de envió por SMS de las coordenadas del modem Syrus se procedió al envío de la localización a una IP y leerla a través de consulta de puertos TCP y UDP y más adelante se procedería a leerlas mediante una página web.</p>
+          <p align="justify">Primeramente se solicitó al ISP la apertura de puertos a usar para poder establecer comunicación entre el modem Syrus y un servidor. Luego se solucionó el problema de no tener una IP fija mediante el uso de un dominio que nos brindó NoIP.com. La lectura de estas coordenadas con protocolos TCP/UDP se logró mediante la implementación de un sniffer. Para ello primero se utilizó el software Wireshark, luego se utilizó uno desarrollado propiamente mediante la herramienta Python. Los comandos utilizados en el modem para el envió de coordenadas a una IP fueron los siguientes:
+            <code> 
+            >SRT;ALL< <br />      
+            >SXADP0100jnjordann.ddns.net;5080< <br />
+            >SDA4;P01< <br />
+            >SGC01TR00060< <br />
+            >SED01NV4;C01+< <br />
+            >QPV< <br />
+            </code>          </p>
+          <p align="justify">Al momento de realizar el envío de las coordenadas a uno de los servidores nos encontramos con el problema de que el ISP no brindó una solución permanente lo que respecta a la apertura de puertos. Por este motivo se pudo desarrollar un solo servidor con el proceso de recibimiento de datos del modem. Así mismo ocurrió para el desarrollo de la página web para la lectura de las coordenadas.</p>
+          <p align="justify">Posteriormente se desarrollará una página web con conexión a un servicio (API) de información geográfica, para nuestros objetivos haremos uso de Google Maps. Finalmente, se establecerá un protocolo de entrega, este justificará la selección del protocolo de transporte utilizado previamente (TCP o UDP).</p>
+          <p align="justify">Al no poderse establecer una solución inmediata al problema por parte del ISP se opta a continuar con el trabajo del segundo servidor, para luego comenzar a trabajar con conexión a un servicio (API) de información geográfica como lo es Google Maps.</p>
         </div>
       </div>
       <div id="sidebar">

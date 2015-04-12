@@ -1,3 +1,0 @@
-# TransLocGPS
-Geolocalización Vehicular
-
