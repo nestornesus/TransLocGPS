@@ -35,38 +35,45 @@ $endtime = $_POST['horafin'];
   
   //AM & PM
   if ($ampmini=="PM"){
-    $hourini = $hourini + 12;
+    $hourini = ($hourini + 12)%24;
   }
   if ($ampmfin=="PM"){
-    $hourfin = $hourfin + 12;
+    $hourfin = ($hourfin + 12)%24;
   }
   //
 
   $comienzo = "{$anoini}-{$mesini}-{$diaini} {$hourini}:{$minini}:00";
   $termino  = "{$anofin}-{$mesfin}-{$diafin} {$hourfin}:{$minfin}:00";
+  
+  
 
-  $query="select * from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}'";
-  $query2="select Latitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}'";
-  $query3="select Longitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}'";
-  $query4="select Fecha from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}'";
+  $query ="select * from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+  $query2="select Latitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+  $query3="select Longitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+  $query4="select Fecha from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+
 ?>
 
 <?php
-$con = mysqli_connect("localhost","root","root","telemetria");
+$con = mysqli_connect("us-cdbr-azure-southcentral-e.cloudapp.net","bfb33240729490","cb24cf9d","tranlocmysqltestdb");
 if (!$con) {
   die('Could not connect: ' . mysqli_error($con));
 }
-mysqli_select_db($con,"telemetria");
+mysqli_select_db($con,"tranlocmysqltestdb");
 $result1= mysqli_query($con,$query);
 $numrow=mysqli_num_rows($result1);
+
+
 //printf ("mon %d.\n", $numrow);
-//echo $numrow;
+
+
+
 $latitud=array();
 $longitud=array();
 $hora=array();
 $result2= mysqli_query($con,$query2);
 $result3= mysqli_query($con,$query3);
-$result4=mysqli_query($con,$query4);
+$result4= mysqli_query($con,$query4);
 $i=0;
 while ($i<$numrow){
   $latitud[$i]= mysqli_fetch_assoc($result2);
