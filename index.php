@@ -11,26 +11,37 @@
 <body>
 
   <?php
-  $query1 ="select latitud from gps where id=(select max(id) from gps);";
-  $query2 ="select longitud from gps where id=(select max(id) from gps);";
+  
   $con = mysqli_connect("us-cdbr-azure-southcentral-e.cloudapp.net","bfb33240729490","cb24cf9d","tranlocmysqltestdb");
   if (!$con) {
     die('Could not connect: ' . mysqli_error($con));
   }
-  mysqli_select_db($con,"tranlocmysqltestdb");
-  $result1 = mysqli_query($con,$query1);
-  $result2 = mysqli_query($con,$query2);
-  var_dump($result1,$result2);
-  $result1 = mysqli_fetch_assoc($result1);
-  $result2 = mysqli_fetch_assoc($result2);
-  printf($result1,$result2);
+  $query ="select fecha, latitud, longitud from gps where id=(select max(id) from gps);";
+  $result = $con->query($query);
+
+  if ($result->num_rows > 0) {
+      // output data of each row
+      while($row = $result->fetch_assoc()) {
+        $fecha = $row["fecha"];
+        $lat  = floatval($row["latitud"]);
+        $long = floatval($row["longitud"]);
+        echo $fecha. " ". $lat. " ". $long;
+      }
+  } else {
+      echo "0 results";
+  }
+
+  $con->close();
 ?>
 
 
 
 <script>
-var lat  = [+10.98880, ];
-var long  = [-74.81166, ];
+var fecha = "<?php print($fecha); ?>";
+var lat   = <?php echo "[ ". $lat. ", ]"; ?>;
+var long  = <?php echo "[ ". $long. ", ]"; ?>;
+
+
 </script>
 
 <script>
@@ -118,7 +129,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
         <div class="col1">
           <h2>Últimas Coordenadas: </h2>
-          <h2>2015-04-11 10:37:23 </h2>
+          <h2><script>document.write(fecha);</script></h2>
           <table width="444" border="0" align="center">
             <tbody>
               <tr>

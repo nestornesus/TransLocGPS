@@ -97,8 +97,8 @@ while ($i<$numrow){
   $i=$i+1;
 }
 echo("];"); 
-
 ?>;
+
 var longi = <?php
 $i=0;
 echo ("[");
@@ -133,7 +133,7 @@ var map;
 function initialize() {
     var posicion= [];
     for (var i=0; i< lat.length; i++){
-    posicion.push(new google.maps.LatLng(lat[i], longi[i])); // Add the coordinates
+    <.push(new google.maps.LatLng(lat[i], longi[i])); // Add the coordinates
     }
 
   var mapOptions = {
