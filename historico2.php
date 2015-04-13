@@ -17,41 +17,34 @@ $starttime = $_POST['horaini'];
 $endtime = $_POST['horafin'];
 // MM/DD/AAAA
 // HH:MM:SS
-  //inicio
-  $diaini = substr($start,3,2);
-  $mesini = substr($start,0,2);
-  $anoini = substr($start,6,10);
-  $hourini =substr($starttime,0,2);
-  $minini = substr($starttime,5,2);
-  $ampmini =substr($starttime,10,12);
-  
-  //fin
-  $diafin = substr($end,3,2);
-  $mesfin = substr($end,0,2);
-  $anofin = substr($end,6,10);
-  $hourfin =substr($endtime,0,2);
-  $minfin = substr($endtime,5,2);
-  $ampmfin =substr($endtime,10,12);
-  
-  //AM & PM
-  if ($ampmini=="PM"){
-    $hourini = ($hourini + 12)%24;
-  }
-  if ($ampmfin=="PM"){
-    $hourfin = ($hourfin + 12)%24;
-  }
-  //
-
-  $comienzo = "{$anoini}-{$mesini}-{$diaini} {$hourini}:{$minini}:00";
-  $termino  = "{$anofin}-{$mesfin}-{$diafin} {$hourfin}:{$minfin}:00";
-  
-  
-
-  $query ="select * from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
-  $query2="select Latitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
-  $query3="select Longitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
-  $query4="select Fecha from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
-
+//inicio
+$diaini = substr($start,3,2);
+$mesini = substr($start,0,2);
+$anoini = substr($start,6,10);
+$hourini =substr($starttime,0,2);
+$minini = substr($starttime,5,2);
+$ampmini =substr($starttime,10,12);
+//fin
+$diafin = substr($end,3,2);
+$mesfin = substr($end,0,2);
+$anofin = substr($end,6,10);
+$hourfin =substr($endtime,0,2);
+$minfin = substr($endtime,5,2);
+$ampmfin =substr($endtime,10,12);
+//AM & PM
+if ($ampmini=="PM"){
+  $hourini = ($hourini + 12)%24;
+}
+if ($ampmfin=="PM"){
+  $hourfin = ($hourfin + 12)%24;
+}
+//
+$comienzo = "{$anoini}-{$mesini}-{$diaini} {$hourini}:{$minini}:00";
+$termino  = "{$anofin}-{$mesfin}-{$diafin} {$hourfin}:{$minfin}:00";
+$query ="select * from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+$query2="select Latitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+$query3="select Longitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+$query4="select Fecha from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
 ?>
 
 <?php
@@ -62,12 +55,7 @@ if (!$con) {
 mysqli_select_db($con,"tranlocmysqltestdb");
 $result1= mysqli_query($con,$query);
 $numrow=mysqli_num_rows($result1);
-
-
 //printf ("mon %d.\n", $numrow);
-
-
-
 $latitud=array();
 $longitud=array();
 $hora=array();
@@ -87,29 +75,27 @@ while ($i<$numrow){
 ?>
 
 <script>
-var lat = <?php
+var lat  = <?php
 $i=0;
 echo ("[");
 while ($i<$numrow){
   foreach ($latitud[$i] as $child) {
     echo $child . ", \n";
-  }   
+  }
   $i=$i+1;
 }
-echo("];"); 
-
+echo("];");
 ?>;
-var longi = <?php
+var long = <?php
 $i=0;
 echo ("[");
 while ($i<$numrow){
-  foreach ($longitud[$i] as $child) {   
+  foreach ($longitud[$i] as $child) {
     echo $child . ", \n";
   }
   $i=$i+1;
 }
-echo("];");  
-
+echo("];");
 ?>;
 </script>
 
@@ -126,53 +112,37 @@ function toggletext(cid)
   };
 }
 //var lat = [12, 14.23, 42.12];
-//var longi = [-12, -14, -12];
-// functions below
+//var long = [-12, -14, -12];
 var map;
 //Make an array with the coordinates from the db
 function initialize() {
-    var posicion= [];
-    for (var i=0; i< lat.length; i++){
-    <.push(new google.maps.LatLng(lat[i], longi[i])); // Add the coordinates
-    }
-
-  var mapOptions = {
-    zoom: 16,
-     center: posicion[lat.length-1],
-    mapTypeId: google.maps.MapTypeId.SATELLITE
-  };
- map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); // Render our map within the empty div
-
-var myLatlng = posicion[lat.length-1];
-
-  var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      title: 'Diseno 201510'
-  });
-
-
-
-  var linea = new google.maps.Polyline({
-  path: posicion,
-    geodesic: true,
-    strokeColor: '#FF0000',
-    strokeOpacity: 1.0,
-    strokeWeight: 2
-  });
-
-
-
-  linea.setMap(map);
+  var posicion= [];
+  for (var i=0; i< lat.length; i++){
+  posicion.push(new google.maps.LatLng(lat[i], long[i])); // Add the coordinates
 }
-
+var mapOptions = {
+  zoom: 16,
+  center: posicion[lat.length-1],
+  mapTypeId: google.maps.MapTypeId.SATELLITE
+};
+map = new google.maps.Map(document.getElementById('mainimg'), mapOptions); // Render our map within the empty div
+var myLatlng = posicion[lat.length-1];
+var marker = new google.maps.Marker({
+  position: myLatlng,
+  map: map,
+  title: 'TransLoc - Trazado Histórico'
+});
+var linea = new google.maps.Polyline({
+  path: posicion,
+  geodesic: true,
+  strokeColor: '#FF0000',
+  strokeOpacity: 1.0,
+  strokeWeight: 2
+});
+linea.setMap(map);
+}
 google.maps.event.addDomListener(window, 'load', initialize);
-
-
-    </script>
-</div>
-
-
+</script>
 
 <div id="topbanner">
   <div class="container">
@@ -287,9 +257,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
         <li><a href="https://github.com/nestornesus/TransLocGPS" target="_blank">Repositorio de TransLoc </a></li>
       </ul>
     </div>
-      
-
-
     <div class="clear"></div>
   </div>
   <div id="footer">

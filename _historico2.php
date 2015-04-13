@@ -3,34 +3,114 @@
 
 <head>
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-  <title>TransLoc - Geolocalización en Tiempo Real</title>
-  <meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
-  <link href="style.css" rel="stylesheet" type="text/css"/>
+  <title>TransLoc - Registro Histórico</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
-  <?php
-  $query1 ="select latitud from gps where id=(select max(id) from gps);";
-  $query2 ="select longitud from gps where id=(select max(id) from gps);";
-  $con = mysqli_connect("us-cdbr-azure-southcentral-e.cloudapp.net","bfb33240729490","cb24cf9d","tranlocmysqltestdb");
-  if (!$con) {
-    die('Could not connect: ' . mysqli_error($con));
+<?php
+$start = $_POST['inicio'];
+$end = $_POST['fin'];
+$starttime = $_POST['horaini'];
+$endtime = $_POST['horafin'];
+// MM/DD/AAAA
+// HH:MM:SS
+  //inicio
+  $diaini = substr($start,3,2);
+  $mesini = substr($start,0,2);
+  $anoini = substr($start,6,10);
+  $hourini =substr($starttime,0,2);
+  $minini = substr($starttime,5,2);
+  $ampmini =substr($starttime,10,12);
+  
+  //fin
+  $diafin = substr($end,3,2);
+  $mesfin = substr($end,0,2);
+  $anofin = substr($end,6,10);
+  $hourfin =substr($endtime,0,2);
+  $minfin = substr($endtime,5,2);
+  $ampmfin =substr($endtime,10,12);
+  
+  //AM & PM
+  if ($ampmini=="PM"){
+    $hourini = ($hourini + 12)%24;
   }
-  mysqli_select_db($con,"tranlocmysqltestdb");
-  $result1 = mysqli_query($con,$query1);
-  $result2 = mysqli_query($con,$query2);
-  var_dump($result1,$result2);
-  $result1 = mysqli_fetch_assoc($result1);
-  $result2 = mysqli_fetch_assoc($result2);
-  printf($result1,$result2);
+  if ($ampmfin=="PM"){
+    $hourfin = ($hourfin + 12)%24;
+  }
+  //
+
+  $comienzo = "{$anoini}-{$mesini}-{$diaini} {$hourini}:{$minini}:00";
+  $termino  = "{$anofin}-{$mesfin}-{$diafin} {$hourfin}:{$minfin}:00";
+  
+  
+
+  $query ="select * from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+  $query2="select Latitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+  $query3="select Longitud from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+  $query4="select Fecha from gps where Fecha >= '{$comienzo}' and Fecha <= '{$termino}';";
+
 ?>
 
+<?php
+$con = mysqli_connect("us-cdbr-azure-southcentral-e.cloudapp.net","bfb33240729490","cb24cf9d","tranlocmysqltestdb");
+if (!$con) {
+  die('Could not connect: ' . mysqli_error($con));
+}
+mysqli_select_db($con,"tranlocmysqltestdb");
+$result1= mysqli_query($con,$query);
+$numrow=mysqli_num_rows($result1);
 
+
+//printf ("mon %d.\n", $numrow);
+
+
+
+$latitud=array();
+$longitud=array();
+$hora=array();
+$result2= mysqli_query($con,$query2);
+$result3= mysqli_query($con,$query3);
+$result4= mysqli_query($con,$query4);
+$i=0;
+while ($i<$numrow){
+  $latitud[$i]= mysqli_fetch_assoc($result2);
+  $longitud[$i]= mysqli_fetch_assoc($result3);
+  $hora[$i]= mysqli_fetch_assoc($result4);
+  //foreach ($longitud[$i] as $child) {
+  //echo $child . "\n";
+  //}
+  $i=$i+1;
+}  
+?>
 
 <script>
-var lat  = [+10.98880, ];
-var long  = [-74.81166, ];
+var lat = <?php
+$i=0;
+echo ("[");
+while ($i<$numrow){
+  foreach ($latitud[$i] as $child) {
+    echo $child . ", \n";
+  }   
+  $i=$i+1;
+}
+echo("];"); 
+
+?>;
+var longi = <?php
+$i=0;
+echo ("[");
+while ($i<$numrow){
+  foreach ($longitud[$i] as $child) {   
+    echo $child . ", \n";
+  }
+  $i=$i+1;
+}
+echo("];");  
+
+?>;
 </script>
 
 <script>
@@ -46,46 +126,61 @@ function toggletext(cid)
   };
 }
 //var lat = [12, 14.23, 42.12];
-//var long = [-12, -14, -12];
+//var longi = [-12, -14, -12];
 // functions below
 var map;
 //Make an array with the coordinates from the db
 function initialize() {
-  var posicion= [];
-  for (var i=0; i< lat.length; i++){
-  posicion.push(new google.maps.LatLng(lat[i], long[i])); // Add the coordinates
-}
-var mapOptions = {  // Refresco guardar, Default
-  zoom: 20,
-  center: posicion[lat.length-1],
-  mapTypeId: google.maps.MapTypeId.SATELLITE
-};
-map = new google.maps.Map(document.getElementById('mainimg'), mapOptions);  // Render our map within the empty div
+    var posicion= [];
+    for (var i=0; i< lat.length; i++){
+    posicion.push(new google.maps.LatLng(lat[i], longi[i])); // Add the coordinates
+    }
+
+  var mapOptions = {
+    zoom: 16,
+     center: posicion[lat.length-1],
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  };
+ map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); // Render our map within the empty div
+
 var myLatlng = posicion[lat.length-1];
-var marker = new google.maps.Marker({
-  position: myLatlng,
-  map: map,
-  title: 'TransLoc'
-});
-var linea = new google.maps.Polyline({
+
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'Diseno 201510'
+  });
+
+
+
+  var linea = new google.maps.Polyline({
   path: posicion,
-  geodesic: true,
-  strokeColor: '#FF0000',
-  strokeOpacity: 1.0,
-  strokeWeight: 2
-});
-linea.setMap(map);
+    geodesic: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+
+
+
+  linea.setMap(map);
 }
+
 google.maps.event.addDomListener(window, 'load', initialize);
-</script>
+
+
+    </script>
+</div>
+
+
 
 <div id="topbanner">
   <div class="container">
     <h1 id="sitename"><a href="index.php">TransLoc</a> <span>Geolocalización Vehicular</span></h1>
     <div id="mainnav">
       <ul>
-        <li class="active"><a href="index.php">Geolocalización<span>En Tiempo Real</span></a></li>
-        <li><a href="historico.php">Archivo<span>Consulta histórica</span></a></li>
+        <li><a href="index.php">Geolocalización<span>En Tiempo Real</span></a></li>
+        <li class="active"><a href="index.php">Archivo<span>Consulta histórica</span></a></li>
         <li><a href="nosotros.php">Nosotros<span>Sobre TransLoc</span></a></li>
         <li><a href="bitacora.php">Bitácora <span>Registros de avances</span></a></li>
       </ul>
@@ -98,7 +193,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
   <div id="wrap">
 
     <div id="homeheader">
-      <div id="mainimg" style="height: 330px; width: 700px;"></div>
+      <div id="mainimg"> <img src="images/mainheader.png" width="700" height="330" alt="" /></div>
       <div id="rightboxes">
         <div class="box1">
           <p class="rotate"> <a href="nosotros.php"><span>¿ Qué es ?</span> </a></p>
@@ -115,37 +210,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
     <div id="maincontent">
       <div id="threecol">
-
-        <div class="col1">
-          <h2>Últimas Coordenadas: </h2>
-          <h2>2015-04-11 10:37:23 </h2>
-          <table width="444" border="0" align="center">
-            <tbody>
-              <tr>
-                <td width="298" height="60"><table width="300" height="60" border="0" align="center">
-                    <tr>
-                      <td width="148" height="25"><strong><font face="verdana">Última Latitud</font></strong></td>
-                      <td width="148"><strong><font face="verdana">Última Longitud</font></strong></td>
-                    </tr>
-                    <tr>
-                      <td align="center"><script>document.write(lat);</script></td>
-                      <td align="center"><script>document.write(long);</script></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="col2">
-          <h2>Consulta Histórica </h2>
-          <p align="justify">Permite la consulta de intervalos de tiempo específicos. Solo es cuestión de llenar los parámetros de búsqueda y listo. </p>
-        </div>
-        <div class="col3">
-          <h2>Localización en Tiempo Real </h2>
-          <p align="justify">Monitorea en tiempo real la ubicación de sus vehículos a través de un modem GPS referencia Syrus, y a su vez se muestra su posición mediante el uso de la API de Google Maps. Es ideal para que desde su computador o celular conozca con exactitud la localización de autos, camiones y mercancía. </p>
-        </div>
+        <h2 align="center">Consulta Histórica</h2>
+        <p align="center">Resultados de la búsqueda en el periodo de tiempo especificado.</p>
+        <p align="justify">&nbsp;</p>
         <div class="clear"></div>
       </div>
       <div class="clear bordered"></div>
