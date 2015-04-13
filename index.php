@@ -10,6 +10,24 @@
 
 <body>
 
+<?php
+  $query1 ="select latitud from gps where id=(select max(id) from gps);";
+  $query2 ="select longitud from gps where id=(select max(id) from gps);";
+  $con = mysqli_connect("us-cdbr-azure-southcentral-e.cloudapp.net","bfb33240729490","cb24cf9d","tranlocmysqltestdb");
+  if (!$con) {
+    die('Could not connect: ' . mysqli_error($con));
+  }
+  mysqli_select_db($con,"tranlocmysqltestdb");
+  $result1 = mysqli_query($con,$query1);
+  $result2 = mysqli_query($con,$query2);
+
+  $result1 = mysqli_fetch_assoc($result1);
+  $result2 = mysqli_fetch_assoc($result2);
+
+  var_dump($result1,$result2);
+
+?>
+
 <script>
 var lat  = [10.9884292, ];;
 var long = [-74.8109141, ];;

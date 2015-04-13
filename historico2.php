@@ -96,9 +96,10 @@ while ($i<$numrow){
   }   
   $i=$i+1;
 }
-echo("];");  
+echo("];"); 
+
 ?>;
-var long = <?php
+var longi = <?php
 $i=0;
 echo ("[");
 while ($i<$numrow){
@@ -108,6 +109,7 @@ while ($i<$numrow){
   $i=$i+1;
 }
 echo("];");  
+
 ?>;
 </script>
 
@@ -124,14 +126,14 @@ function toggletext(cid)
   };
 }
 //var lat = [12, 14.23, 42.12];
-//var long = [-12, -14, -12];
+//var longi = [-12, -14, -12];
 // functions below
 var map;
 //Make an array with the coordinates from the db
 function initialize() {
     var posicion= [];
     for (var i=0; i< lat.length; i++){
-    posicion.push(new google.maps.LatLng(lat[i], long[i])); // Add the coordinates
+    <.push(new google.maps.LatLng(lat[i], longi[i])); // Add the coordinates
     }
 
   var mapOptions = {
